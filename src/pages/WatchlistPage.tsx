@@ -28,10 +28,10 @@ const WatchlistPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900 min-h-screen">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-white">My Watchlist</h1>
-        <div className="text-gray-400">
+        <h1 className="text-2xl font-bold text-white dark:text-white text-gray-900 dark:text-white">My Watchlist</h1>
+        <div className="text-gray-400 dark:text-gray-400 text-gray-600 dark:text-gray-400">
           <span className="mr-2">Total movies:</span>
           <span className="text-[#edb409]">{watchlistMovies.length}</span>
         </div>
@@ -67,7 +67,7 @@ const WatchlistPage: React.FC = () => {
       )}
 
       {seeList && watchlistMovies.length === 0 && (
-        <div className="text-center text-gray-400 py-12">
+        <div className="text-center text-gray-400 dark:text-gray-400 text-gray-600 dark:text-gray-400 py-12">
           <p className="text-xl">Your watchlist is empty</p>
           <p className="mt-2">Add some movies to get started!</p>
         </div>

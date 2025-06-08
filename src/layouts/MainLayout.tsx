@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchGenres, setGenre } from '../store/slices/moviesSlice';
+import ThemeToggle from '../components/ThemeToggle';
 
 const MainLayout: React.FC = () => {
   const [isGenresOpen, setIsGenresOpen] = useState(false);
@@ -41,9 +42,9 @@ const MainLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#141414]">
+    <div className="min-h-screen bg-[#141414] dark:bg-[#141414] bg-white dark:bg-gray-900 transition-colors duration-200">
       {/* Netflix-style header */}
-      <header className="fixed top-0 w-full z-50 bg-black">
+      <header className="fixed top-0 w-full z-50 bg-black dark:bg-black bg-white dark:bg-gray-800 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-8">
@@ -53,16 +54,16 @@ const MainLayout: React.FC = () => {
               
               {/* Main navigation */}
               <nav className="hidden md:flex space-x-6">
-                <Link to="/" className="text-white hover:text-gray-300">Home</Link>
-                <Link to="/watchlist" className="text-white hover:text-gray-300">My List</Link>
+                <Link to="/" className="text-white dark:text-white text-gray-700 dark:text-gray-300 hover:text-gray-300 dark:hover:text-white transition-colors">Home</Link>
+                <Link to="/watchlist" className="text-white dark:text-white text-gray-700 dark:text-gray-300 hover:text-gray-300 dark:hover:text-white transition-colors">My List</Link>
               </nav>
             </div>
 
             <div className="flex items-center space-x-6">
-              {/* <SearchBar /> */}
-              <button className="text-white">Movies</button>
+              <ThemeToggle />
+              <button className="text-white dark:text-white text-gray-700 dark:text-gray-300">Movies</button>
               <div className="relative">
-                <button className="text-white relative">
+                <button className="text-white dark:text-white text-gray-700 dark:text-gray-300 relative">
                   <span className="absolute -top-2 -right-2 bg-[#edb409] text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                     1
                   </span>
@@ -82,16 +83,16 @@ const MainLayout: React.FC = () => {
       </header>
 
       {/* Secondary navigation */}
-      <div className="fixed top-16 w-full z-40 bg-black">
+      <div className="fixed top-16 w-full z-40 bg-black dark:bg-black bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <h1 className="text-4xl font-bold text-white">Movies</h1>
+              <h1 className="text-4xl font-bold text-white dark:text-white text-gray-900 dark:text-white">Movies</h1>
               <div className="relative" ref={dropdownRef}>
                 <button 
                   onClick={() => setIsGenresOpen(!isGenresOpen)}
-                  className={`px-4 py-2 bg-[#1f1f1f] text-white rounded-md flex items-center space-x-2 transition-colors duration-200 ${
-                    isGenresOpen ? 'bg-[#2f2f2f]' : 'hover:bg-[#2f2f2f]'
+                  className={`px-4 py-2 bg-[#1f1f1f] dark:bg-[#1f1f1f] bg-gray-100 dark:bg-gray-700 text-white dark:text-white text-gray-700 dark:text-gray-300 rounded-md flex items-center space-x-2 transition-colors duration-200 ${
+                    isGenresOpen ? 'bg-[#2f2f2f] dark:bg-[#2f2f2f] bg-gray-200 dark:bg-gray-600' : 'hover:bg-[#2f2f2f] dark:hover:bg-[#2f2f2f] hover:bg-gray-200 dark:hover:bg-gray-600'
                   }`}
                 >
                   <span className="mr-2">{currentGenre || 'Genres'}</span>
@@ -108,14 +109,14 @@ const MainLayout: React.FC = () => {
 
                 {/* Genres Dropdown */}
                 {isGenresOpen && (
-                  <div className="absolute mt-2 w-56 bg-[#1f1f1f] rounded-md shadow-lg py-1 z-50 max-h-96 overflow-y-auto scrollbar-hide">
+                  <div className="absolute mt-2 w-56 bg-[#1f1f1f] dark:bg-[#1f1f1f] bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 max-h-96 overflow-y-auto scrollbar-hide border border-gray-200 dark:border-gray-700">
                     <button
                       onClick={() => {
                         dispatch(setGenre(''));
                         setIsGenresOpen(false);
                         navigate('/');
                       }}                      className={`block w-full text-left px-4 py-2 ${
-                        !currentGenre ? 'bg-[#2f2f2f] text-[#edb409]' : 'text-white hover:bg-[#2f2f2f]'
+                        !currentGenre ? 'bg-[#2f2f2f] dark:bg-[#2f2f2f] bg-gray-100 dark:bg-gray-700 text-[#edb409]' : 'text-white dark:text-white text-gray-700 dark:text-gray-300 hover:bg-[#2f2f2f] dark:hover:bg-[#2f2f2f] hover:bg-gray-100 dark:hover:bg-gray-700'
                       } transition-colors duration-200`}
                     >
                       All Genres
@@ -124,7 +125,7 @@ const MainLayout: React.FC = () => {
                       <button
                         key={genre.id}
                         onClick={() => handleGenreClick(genre.name)}                        className={`block w-full text-left px-4 py-2 ${
-                          currentGenre === genre.name ? 'bg-[#2f2f2f] text-[#edb409]' : 'text-white hover:bg-[#2f2f2f]'
+                          currentGenre === genre.name ? 'bg-[#2f2f2f] dark:bg-[#2f2f2f] bg-gray-100 dark:bg-gray-700 text-[#edb409]' : 'text-white dark:text-white text-gray-700 dark:text-gray-300 hover:bg-[#2f2f2f] dark:hover:bg-[#2f2f2f] hover:bg-gray-100 dark:hover:bg-gray-700'
                         } transition-colors duration-200`}
                       >
                         {genre.name}

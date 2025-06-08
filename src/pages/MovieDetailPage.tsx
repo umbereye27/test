@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import type { RootState } from "../store/store";
 import { useAppDispatch } from "../store/hooks";
 import { fetchMovieDetail } from "../store/slices/moviesSlice";
+import { fetchReviews, clearReviews } from "../store/slices/reviewsSlice";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import WatchlistButton from "../components/WatchlistButton";
+import ReviewForm from "../components/ReviewForm";
+import ReviewList from "../components/ReviewList";
 
 export const MovieDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,33 +22,39 @@ export const MovieDetailPage: React.FC = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchMovieDetail(id));
+      dispatch(fetchReviews(id));
     }
+    
+    // Cleanup reviews when component unmounts
+    return () => {
+      dispatch(clearReviews());
+    };
   }, [dispatch, id]);
 
   if (isLoading)
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        Loading...
+      <div className="flex justify-center items-center min-h-screen bg-white dark:bg-gray-900">
+        <div className="text-gray-900 dark:text-white">Loading...</div>
       </div>
     );
   if (error)
     return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
+      <div className="flex justify-center items-center min-h-screen text-red-500 bg-white dark:bg-gray-900">
         Error: {error}
       </div>
     );
   if (!movieDetail)
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        No details found.
+      <div className="flex justify-center items-center min-h-screen bg-white dark:bg-gray-900">
+        <div className="text-gray-900 dark:text-white">No details found.</div>
       </div>
     );
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-white dark:bg-gray-900 min-h-screen">
       <Link
         to="/"
-        className="inline-flex items-center text-white mb-6 hover:text-[#edb409] transition-colors"
+        className="inline-flex items-center text-white dark:text-white text-gray-700 dark:text-gray-300 mb-6 hover:text-[#edb409] transition-colors"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +73,7 @@ export const MovieDetailPage: React.FC = () => {
         Back to Movies
       </Link>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         <div className="md:col-span-1">
           {movieDetail.primaryImage?.url && (
             <img
@@ -76,22 +85,22 @@ export const MovieDetailPage: React.FC = () => {
         </div>
 
         <div className="md:col-span-2">
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold text-white dark:text-white text-gray-900 dark:text-white mb-4">
             {movieDetail.titleText?.text}
           </h1>
 
           {movieDetail.releaseYear?.year && (
-            <p className="text-gray-400 mb-4">
+            <p className="text-gray-400 dark:text-gray-400 text-gray-600 dark:text-gray-400 mb-4">
               Release Year: {movieDetail.releaseYear.year}
             </p>
           )}
 
           {movieDetail.overview && (
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-white mb-2">
+              <h2 className="text-xl font-semibold text-white dark:text-white text-gray-900 dark:text-white mb-2">
                 Overview
               </h2>
-              <p className="text-gray-300">{movieDetail.overview}</p>
+              <p className="text-gray-300 dark:text-gray-300 text-gray-700 dark:text-gray-300">{movieDetail.overview}</p>
             </div>
           )}
 
@@ -117,7 +126,7 @@ export const MovieDetailPage: React.FC = () => {
 
           {movieDetail.vote_average && (
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Rating</h2>
+              <h2 className="text-xl font-semibold text-white dark:text-white text-gray-900 dark:text-white mb-2">Rating</h2>
               <div className="flex items-center space-x-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +138,7 @@ export const MovieDetailPage: React.FC = () => {
                     d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
                   />
                 </svg>
-                <span className="text-white font-semibold">
+                <span className="text-white dark:text-white text-gray-900 dark:text-white font-semibold">
                   {movieDetail.vote_average}/10
                 </span>
               </div>
@@ -138,12 +147,12 @@ export const MovieDetailPage: React.FC = () => {
 
           {movieDetail.genres && (
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-white mb-2">Genres</h2>
+              <h2 className="text-xl font-semibold text-white dark:text-white text-gray-900 dark:text-white mb-2">Genres</h2>
               <div className="flex flex-wrap gap-2">
                 {movieDetail.genres.genres.map((genre, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm"
+                    className="px-3 py-1 bg-gray-700 dark:bg-gray-700 bg-gray-200 dark:bg-gray-700 text-white dark:text-white text-gray-800 dark:text-white rounded-full text-sm"
                   >
                     {genre.text}
                   </span>
@@ -151,6 +160,16 @@ export const MovieDetailPage: React.FC = () => {
               </div>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <ReviewForm movieId={id!} />
+        </div>
+        <div>
+          <ReviewList />
         </div>
       </div>
     </div>

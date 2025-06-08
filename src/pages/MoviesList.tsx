@@ -39,7 +39,7 @@ const MovieList: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-4rem)]">
+      <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] bg-white dark:bg-gray-900">
         <LoadingSpinner size="large" className="border-[#edb409]" />
       </div>
     );
@@ -47,7 +47,7 @@ const MovieList: React.FC = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] text-red-500">
+      <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] text-red-500 bg-white dark:bg-gray-900">
         Error: {error}
       </div>
     );
@@ -59,7 +59,7 @@ const MovieList: React.FC = () => {
 
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6 bg-white dark:bg-gray-900 min-h-screen">
       {/* Hero Section */}
       {movies[0] && (
         <div className="relative h-[600px] mb-12 rounded-lg overflow-hidden">
@@ -108,7 +108,7 @@ const MovieList: React.FC = () => {
 
       {/* Recently Added Section */}
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-white mb-4 flex items-center">
+        <h2 className="text-2xl font-bold text-white dark:text-white text-gray-900 dark:text-white mb-4 flex items-center">
           <span className="text-[#edb409] mr-2">M</span>
           Recently Movie
         </h2>
@@ -121,7 +121,7 @@ const MovieList: React.FC = () => {
 
       {/* Trending Now Section */}
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-white mb-4">Trending Now</h2>
+        <h2 className="text-2xl font-bold text-white dark:text-white text-gray-900 dark:text-white mb-4">Trending Now</h2>
         <div className="grid grid-cols-5 gap-4">
           {trending.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
@@ -142,4 +142,3 @@ const MovieList: React.FC = () => {
 };
 
 export default MovieList;
-
